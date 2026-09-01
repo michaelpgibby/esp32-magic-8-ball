@@ -1,0 +1,12 @@
+# Device and network credentials
+secrets.yaml
+
+# ESPHome build output and local state
+.esphome/
+.pioenvs/
+.piolibdeps/
+
+# Editor and operating-system files
+.DS_Store
+.idea/
+.vscode/

@@ -1,0 +1,563 @@
+esphome:
+  name: magic8ball
+  friendly_name: Magic8Ball
+  platformio_options:
+    board_build.flash_mode: dio
+  libraries:
+    - Wire
+    - SPI
+    - SensorLib@0.2.1
+
+esp32:
+  board: esp32-s3-devkitc-1
+  framework:
+    type: arduino
+
+logger:
+
+api:
+  encryption:
+    key: !secret api_encryption_key
+
+ota:
+  - platform: esphome
+    password: !secret ota_password
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  power_save_mode: none
+  ap:
+    ssid: "Magic8Ball Fallback Hotspot"
+    password: !secret fallback_ap_password
+
+captive_portal:
+
+web_server:
+  port: 80
+  auth:
+    username: !secret web_username
+    password: !secret web_password
+
+# ---------------- Backlight / screen power (GPIO40) ----------------
+# We use this instead of display.enable_pin so we can turn it on/off with actions.
+switch:
+  - platform: gpio
+    id: screen_power
+    name: "Screen Power (BL)"
+    pin:
+      number: GPIO40
+      mode: OUTPUT
+      inverted: false        # if screen stays dark, try true
+    restore_mode: ALWAYS_ON  # boot with screen ON
+
+# ---------------- Editable phrases (38) ----------------
+text:
+  # First item defines defaults + has id/name (required)
+  - &slot_defaults
+    platform: template
+    optimistic: true
+    mode: text
+    min_length: 0
+    max_length: 64
+    restore_value: true
+    id: phrase01
+    name: "8Ball Phrase 01"
+    initial_value: "Maybe try a Supervisor Agent?"
+
+  - <<: *slot_defaults
+    id: phrase02
+    name: "8Ball Phrase 02"
+    initial_value: "Workflow says... Not Approved Yet."
+  - <<: *slot_defaults
+    id: phrase03
+    name: "8Ball Phrase 03"
+    initial_value: "Issue likely between keyboard and chair."
+  - <<: *slot_defaults
+    id: phrase04
+    name: "8Ball Phrase 04"
+    initial_value: "Ask the Agent before proceeding."
+  - <<: *slot_defaults
+    id: phrase05
+    name: "8Ball Phrase 05"
+    initial_value: "PO still pending in the approval chain..."
+  - <<: *slot_defaults
+    id: phrase06
+    name: "8Ball Phrase 06"
+    initial_value: "Error 401: Wisdom not authorized."
+  - <<: *slot_defaults
+    id: phrase07
+    name: "8Ball Phrase 07"
+    initial_value: "Agent Studio recommends a re-train."
+  - <<: *slot_defaults
+    id: phrase08
+    name: "8Ball Phrase 08"
+    initial_value: "When in doubt, run the ESS job."
+  - <<: *slot_defaults
+    id: phrase09
+    name: "8Ball Phrase 09"
+    initial_value: "The data model knows, but it’s not telling."
+  - <<: *slot_defaults
+    id: phrase10
+    name: "8Ball Phrase 10"
+    initial_value: "Try clearing browser cache... of destiny."
+  - <<: *slot_defaults
+    id: phrase11
+    name: "8Ball Phrase 11"
+    initial_value: "Redwood UI sees a bright future."
+  - <<: *slot_defaults
+    id: phrase12
+    name: "8Ball Phrase 12"
+    initial_value: "Auto-create purchase order? The signs point to yes."
+  - <<: *slot_defaults
+    id: phrase13
+    name: "8Ball Phrase 13"
+    initial_value: "Procurement rules say... maybe."
+  - <<: *slot_defaults
+    id: phrase14
+    name: "8Ball Phrase 14"
+    initial_value: "Your account derivation has spoken."
+  - <<: *slot_defaults
+    id: phrase15
+    name: "8Ball Phrase 15"
+    initial_value: "AI suggests you check your privileges."
+  - <<: *slot_defaults
+    id: phrase16
+    name: "8Ball Phrase 16"
+    initial_value: "Ask again after next quarterly release."
+  - <<: *slot_defaults
+    id: phrase17
+    name: "8Ball Phrase 17"
+    initial_value: "Oracle Cloud: where mysteries become BPM workflows."
+  - <<: *slot_defaults
+    id: phrase18
+    name: "8Ball Phrase 18"
+    initial_value: "Hold detected. Seek the TAD."
+  - <<: *slot_defaults
+    id: phrase19
+    name: "8Ball Phrase 19"
+    initial_value: "You have insufficient roles to know that answer."
+  - <<: *slot_defaults
+    id: phrase20
+    name: "8Ball Phrase 20"
+    initial_value: "The Supplier Portal is down... or is it you?"
+  - <<: *slot_defaults
+    id: phrase21
+    name: "8Ball Phrase 21"
+    initial_value: "Your next approval lies with the VP...of Fate."
+  - <<: *slot_defaults
+    id: phrase22
+    name: "8Ball Phrase 22"
+    initial_value: "The ledger balances... but do you?"
+  - <<: *slot_defaults
+    id: phrase23
+    name: "8Ball Phrase 23"
+    initial_value: "Fusion knows all—except when it doesn’t."
+  - <<: *slot_defaults
+    id: phrase24
+    name: "8Ball Phrase 24"
+    initial_value: "Destiny says: rerun the diagnostic report."
+  - <<: *slot_defaults
+    id: phrase25
+    name: "8Ball Phrase 25"
+    initial_value: "WOW! (Way Oracle Works)"
+  - <<: *slot_defaults
+    id: phrase26
+    name: "8Ball Phrase 26"
+    initial_value: "Ask the Policy Advisor for guidance."
+  - <<: *slot_defaults
+    id: phrase27
+    name: "8Ball Phrase 27"
+    initial_value: "A new agent update awaits your deployment."
+  - <<: *slot_defaults
+    id: phrase28
+    name: "8Ball Phrase 28"
+    initial_value: "The SLA engine whispers... accrual variance."
+  - <<: *slot_defaults
+    id: phrase29
+    name: "8Ball Phrase 29"
+    initial_value: "It’s not a bug, it’s a feature."
+  - <<: *slot_defaults
+    id: phrase30
+    name: "8Ball Phrase 30"
+    initial_value: "You have reached enlightenment: PO approved."
+  - <<: *slot_defaults
+    id: phrase31
+    name: "8Ball Phrase 31"
+    initial_value: "Try a Workflow Agent"
+  - <<: *slot_defaults
+    id: phrase32
+    name: "8Ball Phrase 32"
+    initial_value: "Try a Sequential Agent"
+  - <<: *slot_defaults
+    id: phrase33
+    name: "8Ball Phrase 33"
+    initial_value: "Evaluate with METRO"
+  - <<: *slot_defaults
+    id: phrase34
+    name: "8Ball Phrase 34"
+    initial_value: "Create a new Business Object"
+  - <<: *slot_defaults
+    id: phrase35
+    name: "8Ball Phrase 35"
+    initial_value: "Add a tool"
+  - <<: *slot_defaults
+    id: phrase36
+    name: "8Ball Phrase 36"
+    initial_value: "Add a Topic"
+  - <<: *slot_defaults
+    id: phrase37
+    name: "8Ball Phrase 37"
+    initial_value: "Enable a custom Summarization Prompt"
+  - <<: *slot_defaults
+    id: phrase38
+    name: "8Ball Phrase 38"
+    initial_value: "Switch the LLM"
+
+  - platform: template
+    id: ring_text
+    name: "Ring Text"
+    mode: text
+    min_length: 0
+    max_length: 32
+    restore_value: true
+    optimistic: true
+    initial_value: "#Huron"
+
+
+# ---------------- SPI for the LCD ----------------
+spi:
+  clk_pin: GPIO10
+  mosi_pin: GPIO11
+
+# ---------------- Display (no enable_pin; we control GPIO40 ourselves) ----------------
+display:
+  - platform: mipi_spi
+    model: GC9A01A
+    id: lcd
+    cs_pin: GPIO9
+    dc_pin: GPIO8
+    reset_pin: GPIO12
+    # enable_pin: GPIO40      # keep removed; power handled elsewhere
+    dimensions: 240x240
+    rotation: 0
+    color_order: rgb
+    invert_colors: true       # Set false if colors appear inverted on your display
+    data_rate: 20MHz
+    update_interval: 80ms
+    lambda: |-
+      using std::string;
+      using std::vector;
+
+      const int W = 240, H = 240;
+      const int cx = W/2, cy = H/2, r = 115;
+
+      // Battery % (0..100). If sensor not ready yet, assume mid.
+      float pct = isnan(id(batt_pct).state) ? 50.0f : id(batt_pct).state;
+
+      // Ring color by charge level
+      Color ring = Color(180,180,180);
+      if (pct >= 60.0f)      ring = Color(  0, 255,   0);   // green
+      else if (pct >= 30.0f) ring = Color(255, 200,   0);   // yellow
+      else                   ring = Color(255,   0,   0);   // red
+
+      // 1) Background + ring
+      it.fill(Color::BLACK);
+      it.circle(cx, cy, r,   ring);
+      it.circle(cx, cy, r-1, ring);
+
+      // 2) Text color (very light blue)
+      const Color TEXT(180, 220, 255);
+
+      // 3) Safe accel values
+      float xg = isnan(id(ax).state) ? 0.0f : id(ax).state;
+      float yg = isnan(id(ay).state) ? 0.0f : id(ay).state;
+
+      // Map tilt to small offsets
+      float off_x_raw =  yg * 16.0f;   // left/right
+      float off_y_raw = -xg * 16.0f;   // up/down
+
+      static float off_x = 0.0f, off_y = 0.0f;
+      off_x = off_x * 0.90f + off_x_raw * 0.10f;
+      off_y = off_y * 0.90f + off_y_raw * 0.10f;
+
+      // gentle bob
+      float t = millis() * 0.003f;
+      float bob_x = 2.0f * sinf(t * 0.7f);
+      float bob_y = 2.0f * sinf(t * 0.9f);
+
+      int center_x = cx + (int)(off_x + bob_x);
+      int center_y = cy + (int)(off_y + bob_y);
+
+      // HARD CLAMPS so text never leaves screen
+      center_x = std::max(40, std::min(W-40, center_x));
+      center_y = std::max(50, std::min(H-50, center_y));
+
+      // word-wrap helper
+      auto draw_wrapped_centered = [&](int c_x, int start_y, int max_w, const string &text) {
+        vector<string> words; { string w;
+          for (size_t i = 0; i <= text.size(); i++) {
+            if (i == text.size() || text[i] == ' ') { if (!w.empty()) words.push_back(w); w.clear(); }
+            else w.push_back(text[i]);
+          }
+        }
+        vector<string> lines;
+        string line;
+        for (auto &wrd : words) {
+          string cand = line.empty() ? wrd : line + " " + wrd;
+          int x1,y1,tw,th;
+          it.get_text_bounds(0,0,cand.c_str(), id(font_md), TextAlign::TOP_LEFT, &x1,&y1,&tw,&th);
+          if (tw <= max_w) line = cand;
+          else { if (!line.empty()) lines.push_back(line); line = wrd; }
+        }
+        if (!line.empty()) lines.push_back(line);
+
+        const int lh = id(font_md).get_height();
+        int y = start_y;
+        for (auto &ln : lines) {
+          if (y > H - lh) break;
+          it.printf(c_x, y, id(font_md), TEXT, TextAlign::CENTER, "%s", ln.c_str());
+          y += lh + 2;
+        }
+      };
+
+      const int MAX_W = 180;
+      const int TOP_Y = std::max(40, std::min(160, center_y - 18));
+      draw_wrapped_centered(center_x, TOP_Y, MAX_W, id(current_phrase));
+
+      // ---- Curved ring text (upright glyphs along top arc) ----
+      if (!id(ring_text).state.empty()) {
+        const std::string s = id(ring_text).state;
+
+        // Position slightly inside the ring (toward center)
+        const float rr = r - 26.0f; //bigger number moves it lower
+
+        // Measure each character width with spacing and center by arc length
+        const int spacing = 6;  // adjust 6..12 to taste
+        std::vector<int> cw; cw.reserve(s.size());
+        int total_px = 0;
+        for (char c : s) {
+          char buf[2] = {c, 0};
+          int x1, y1, tw, th;
+          it.get_text_bounds(0, 0, buf, id(font_sm), TextAlign::TOP_LEFT, &x1, &y1, &tw, &th);
+          cw.push_back(tw);
+          total_px += tw + spacing;
+        }
+        if (!cw.empty()) total_px -= spacing;  // remove trailing spacing
+
+        const float kPI = 3.14159265f;
+        float angle_span = (rr > 1.0f) ? (total_px / rr) : 0.0f;  // radians
+        float start_a = -kPI/2.0f - angle_span/2.0f;              // centered at 12 o'clock
+
+        // Fixed blue (soft, readable)
+        const Color RT(155, 75, 0);
+
+        float advance = 0.0f;
+        for (size_t i = 0; i < s.size(); ++i) {
+          float mid_px = advance + cw[i] * 0.5f;
+          float a = start_a + (mid_px / rr);
+          float x = cx + rr * cosf(a);
+          float y = cy + rr * sinf(a) - id(font_sm).get_height() * 0.55f;
+
+          it.printf((int)x, (int)y, id(font_sm), RT, TextAlign::CENTER, "%c", s[i]);
+          advance += cw[i] + spacing;
+        }
+      }
+
+
+
+font:
+  - file: "gfonts://Roboto@500"
+    id: font_md
+    size: 22
+
+   # New smaller font for the curved ring text
+  - file: "gfonts://Roboto@500"
+    id: font_sm
+    size: 22
+
+# ---------------- Globals ----------------
+globals:
+  - id: current_phrase
+    type: std::string
+    restore_value: no
+    initial_value: '"Maybe try a Supervisor Agent?"'
+  - id: last_activity_ms
+    type: uint32_t
+    restore_value: no
+    initial_value: '0'
+
+# ---------------- IMU (QMI8658) + Battery ----------------
+external_components:
+  - source: github://dala318/esphome-qmi8658@v0.1.1
+
+i2c:
+  sda: GPIO6
+  scl: GPIO7
+  scan: true
+
+sensor:
+  - platform: qmi8658
+    address: 0x6B
+    acceleration_x: { id: ax }
+    acceleration_y: { id: ay }
+    acceleration_z: { id: az }
+    update_interval: 100ms
+
+  # Battery voltage via divider on GPIO1 (multiply by 3 to get pack volts)
+  - platform: adc
+    id: vbat_adc
+    pin: GPIO1
+    attenuation: 11db
+    update_interval: 10s
+    filters:
+      - multiply: 3.0
+      - sliding_window_moving_average:
+          window_size: 5
+          send_every: 1
+
+  # Battery percentage (rough mapping)
+  - platform: template
+    id: batt_pct
+    name: "Battery %"
+    unit_of_measurement: "%"
+    update_interval: 30s
+    lambda: |-
+      float v = id(vbat_adc).state;     // pack volts
+      // Clamp to expected range to avoid negative or >100
+      if (v < 3.20f) v = 3.20f;
+      if (v > 4.20f) v = 4.20f;
+      float pct = (v - 3.20f) / (4.20f - 3.20f) * 100.0f;
+      return pct;
+    accuracy_decimals: 0
+
+  - platform: template
+    id: batt_volts
+    name: "Battery Volts"
+    unit_of_measurement: "V"
+    accuracy_decimals: 2
+    update_interval: 10s
+    lambda: |-
+      return id(vbat_adc).state;   // already scaled to pack volts
+
+
+# ---------------- Idle sleep + shake handling ----------------
+interval:
+  # Motion/activity + shake-to-roll
+  - interval: 300ms
+    then:
+      - lambda: |-
+          static float last_mag = 1.0f;
+          static uint32_t last_ts = 0;
+
+          float x = id(ax).state, y = id(ay).state, z = id(az).state;
+          float mag = sqrtf(x*x + y*y + z*z);
+
+          // any small movement = activity (resets idle timer)
+          if (fabsf(mag - last_mag) > 0.08f) {
+            id(last_activity_ms) = millis();
+          }
+
+          // shake threshold + cooldown
+          bool shook  = fabsf(mag - last_mag) > 0.85f;
+          bool cooled = (millis() - last_ts) > 600;
+
+          if (shook && cooled) {
+            auto get_phrase = [&](int idx) -> std::string {
+              switch (idx) {
+                case 0:  return id(phrase01).state;
+                case 1:  return id(phrase02).state;
+                case 2:  return id(phrase03).state;
+                case 3:  return id(phrase04).state;
+                case 4:  return id(phrase05).state;
+                case 5:  return id(phrase06).state;
+                case 6:  return id(phrase07).state;
+                case 7:  return id(phrase08).state;
+                case 8:  return id(phrase09).state;
+                case 9:  return id(phrase10).state;
+                case 10: return id(phrase11).state;
+                case 11: return id(phrase12).state;
+                case 12: return id(phrase13).state;
+                case 13: return id(phrase14).state;
+                case 14: return id(phrase15).state;
+                case 15: return id(phrase16).state;
+                case 16: return id(phrase17).state;
+                case 17: return id(phrase18).state;
+                case 18: return id(phrase19).state;
+                case 19: return id(phrase20).state;
+                case 20: return id(phrase21).state;
+                case 21: return id(phrase22).state;
+                case 22: return id(phrase23).state;
+                case 23: return id(phrase24).state;
+                case 24: return id(phrase25).state;
+                case 25: return id(phrase26).state;
+                case 26: return id(phrase27).state;
+                case 27: return id(phrase28).state;
+                case 28: return id(phrase29).state;
+                case 29: return id(phrase30).state;
+                case 30: return id(phrase31).state;
+                case 31: return id(phrase32).state;
+                case 32: return id(phrase33).state;
+                case 33: return id(phrase34).state;
+                case 34: return id(phrase35).state;
+                case 35: return id(phrase36).state;
+                case 36: return id(phrase37).state;
+                case 37: return id(phrase38).state;
+              }
+              return std::string();
+            };
+
+            std::vector<int> cands;
+            cands.reserve(38);
+            for (int i = 0; i < 38; i++) {
+              auto s = get_phrase(i);
+              if (!s.empty()) cands.push_back(i);
+            }
+
+            if (!cands.empty()) {
+              static int last_idx = -1;
+              int pick = cands[ random_uint32() % cands.size() ];
+              if (cands.size() > 1 && pick == last_idx) {
+                pick = cands[ random_uint32() % cands.size() ];
+              }
+              last_idx = pick;
+
+              id(current_phrase) = get_phrase(pick);
+              id(lcd).update();
+            } else {
+              id(current_phrase) = "Add phrases on the web page!";
+              id(lcd).update();
+            }
+
+            // wake screen on shake
+            id(last_activity_ms) = millis();
+            // set a small flag via script (or just use a separate interval)
+          }
+
+          last_mag = mag;
+
+  # Wake/sleep dispatcher & idle timer
+  - interval: 500ms
+    then:
+      - lambda: |-
+          // If we've been active in the last 600ms, ensure screen ON
+          const uint32_t NOW = millis();
+          static bool screen_is_on = true;
+          const uint32_t IDLE_MS = 1UL * 60UL * 1000UL;
+
+          // Wake when there was recent activity
+          if ((NOW - id(last_activity_ms)) < 600) {
+            if (!screen_is_on) {
+              // turn on BL
+              id(screen_power).turn_on();
+              screen_is_on = true;
+              id(lcd).update();
+            }
+            return;
+          }
+
+          // Otherwise, if past idle threshold, sleep (turn off BL)
+          if (screen_is_on && (NOW - id(last_activity_ms)) > IDLE_MS) {
+            id(screen_power).turn_off();
+            screen_is_on = false;
+          }
