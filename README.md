@@ -15,6 +15,24 @@ and switches off the display backlight after one minute of inactivity.
 - Automatic wake on motion and backlight sleep after inactivity
 - Encrypted ESPHome API, OTA updates, captive portal, and authenticated web UI
 
+## Bill of materials
+
+| Qty. | Item | Notes and example source |
+| ---: | --- | --- |
+| 1 | Waveshare ESP32-S3-LCD-1.28 | Use the non-touch 1.28-inch round LCD version targeted by this configuration. [Waveshare product page](https://www.waveshare.com/esp32-s3-lcd-1.28.htm) · [Amazon search](https://www.amazon.com/s?k=Waveshare+ESP32-S3-LCD-1.28) |
+| 1 | 3.7 V LiPo battery, approximately 950 mAh | A protected 1-cell battery such as a 503450-size 950 mAh pack works if it fits the enclosure. The board uses an **MX1.25 2-pin connector**; verify connector type and polarity before connecting it. [Amazon search](https://www.amazon.com/s?k=3.7V+950mAh+LiPo+MX1.25+2-pin) |
+| 3 | M2 × 12 mm machine screws | Used to fasten the enclosure. Choose the head style that matches the printed recesses. [Amazon search](https://www.amazon.com/s?k=M2+x+12mm+machine+screws) |
+| 3 | M2 nuts or heat-set inserts | Optional, depending on how the enclosure's screw posts are designed. [Amazon search](https://www.amazon.com/s?k=M2+heat+set+inserts+nuts) |
+| 1 | Miniature SPDT slide switch | Use the switch style and dimensions required by your enclosure and wiring; wire it as the project's on/off switch. [Amazon search](https://www.amazon.com/s?k=mini+SPDT+slide+switch) |
+| 1 | USB-C data cable | Needed for the first flash and useful for charging and diagnostics. [Amazon search](https://www.amazon.com/s?k=USB-C+data+cable) |
+| As needed | Hookup wire, solder, and heat-shrink tubing | For the battery/switch connections. [Amazon search](https://www.amazon.com/s?k=electronic+hookup+wire+solder+heat+shrink+kit) |
+| 1 | 3D printer | A typical FDM printer with a 0.4 mm nozzle is suitable for the enclosure. |
+| About 50–100 g | PLA or PETG filament | PLA is easiest to print; PETG is tougher and more heat resistant. Choose a color that gives the display good contrast. [Amazon search](https://www.amazon.com/s?k=1.75mm+PLA+filament) |
+
+Shopping links are examples, not endorsements or affiliate links. Availability
+and listings change. Check dimensions, plug type, battery polarity, and voltage
+before ordering or connecting any part. Never force a battery connector.
+
 ## Hardware and pin map
 
 The configuration targets an `esp32-s3-devkitc-1` and these connected parts:
@@ -63,6 +81,32 @@ The QMI8658 integration is loaded from the third-party
 [`dala318/esphome-qmi8658`](https://github.com/dala318/esphome-qmi8658)
 component pinned to `v0.1.1`. Review that component before using it on a device
 connected to a trusted network.
+
+## Assembly and photos
+
+Assembly photos will live in [`docs/images`](docs/images). A useful sequence is:
+
+1. Print the enclosure parts and remove any supports.
+2. Test-fit the ESP32-S3 display board, battery, and switch before soldering.
+3. Check battery connector type and polarity with the battery disconnected.
+4. Wire and insulate the switch and battery connections.
+5. Flash and test the device before closing the enclosure.
+6. Route the wiring away from screw posts, then close the case with the three
+   M2 × 12 mm screws.
+
+To add photos from a phone, open this repository on GitHub, browse to
+`docs/images`, choose **Add file → Upload files**, select the photos, and commit
+the upload. JPEG or PNG works best; convert iPhone HEIC images first if needed.
+Short lowercase names such as `01-printed-parts.jpg`,
+`02-wiring.jpg`, and `03-final-assembly.jpg` keep them in order. Avoid including
+Wi-Fi credentials, addresses, faces, location metadata, or other private
+information in photos.
+
+Add an uploaded photo to this section with:
+
+```md
+![Printed enclosure parts](docs/images/01-printed-parts.jpg)
+```
 
 ## Security
 
