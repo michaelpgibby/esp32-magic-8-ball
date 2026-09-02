@@ -30,7 +30,7 @@ and switches off the display backlight after one minute of inactivity.
 
 Shopping links are examples, not endorsements or affiliate links. Availability
 and listings change. Check dimensions, plug type, battery polarity, and voltage
-before ordering or connecting any part. Never force a battery connector.
+before ordering or connecting any part. Never force a battery connector, be careful tightening the hold down bar to avoid unnecessary pressure. 
 
 ## Hardware and pin map
 
@@ -85,34 +85,15 @@ connected to a trusted network.
 
 Assembly photos will live in [`docs/images`](docs/images). A useful sequence is:
 
-1. Print the enclosure parts and remove any supports.
+1. Print the enclosure parts and remove any supports. You can print it from Makerworld: https://makerworld.com/en/models/3249742-magic-8-ball#profileId-3682836
 2. Test-fit the ESP32-S3 display board, battery, and switch before soldering.
 3. Check battery connector type and polarity with the battery disconnected.
 4. Wire and insulate the switch and battery connections.
-5. Flash and test the device before closing the enclosure.
+5. Flash and test the device before closing the enclosure. At this point, turn the display on and make sure the screen is evenly black when lit up. If you tighten the cover too much, then it may have some white spots on the screen. You want it snug enough that people tapping aggressively don't knock it down, but not so tight that it puts pressure on the screen that causes discoloration. 
 6. Route the wiring away from screw posts, then close the case with the three
-   M2 × 12 mm screws.
+   M2 × 12 mm screws, and the battery cover with two more. Don't over tighten the battery hold down bar.
+   7. Screw on the top cover. It's a weird fit, depending on your printer tolerances, you may need to try several times to get it connected. 
 
-To add photos from a phone, open this repository on GitHub, browse to
-`docs/images`, choose **Add file → Upload files**, select the photos, and commit
-the upload. JPEG or PNG works best; convert iPhone HEIC images first if needed.
-Short lowercase names such as `01-printed-parts.jpg`,
-`02-wiring.jpg`, and `03-final-assembly.jpg` keep them in order. Avoid including
-Wi-Fi credentials, addresses, faces, location metadata, or other private
-information in phot
-
-Add an uploaded photo to this section with:
-
-```md
-![Printed enclosure parts](docs/images/01-printed-parts.jpg)
-```
-
-## Security
-
-Never commit `secrets.yaml`. If credentials have previously appeared in a
-shared file, repository, chat, or screenshot, rotate them before using the
-device again. The included `.gitignore` prevents the normal secrets file from
-being added to Git.
 
 ## License
 
