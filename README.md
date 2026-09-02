@@ -26,7 +26,7 @@ and switches off the display backlight after one minute of inactivity.
 | 1 | USB-C data cable | Needed for the first flash and useful for charging and diagnostics. [Amazon search](https://www.amazon.com/s?k=USB-C+data+cable) |
 | As needed | Hookup wire, solder, and heat-shrink tubing | For the battery/switch connections. [Amazon search](https://www.amazon.com/s?k=electronic+hookup+wire+solder+heat+shrink+kit) |
 | 1 | 3D printer | A typical FDM printer with a 0.4 mm nozzle is suitable for the enclosure. |
-| About 50–100 g | PLA or PETG filament | PLA is easiest to print; PETG is tougher and more heat resistant. Choose a color that gives the display good contrast. [Amazon search](https://www.amazon.com/s?k=1.75mm+PLA+filament) |
+| About 60 g | PLA or PETG filament | I love PETG for heat resistance and durability, but the shiny nature feels weird to hold all day. PLA has been durable enough and feels better. 
 
 Shopping links are examples, not endorsements or affiliate links. Availability
 and listings change. Check dimensions, plug type, battery polarity, and voltage
