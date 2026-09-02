@@ -8,8 +8,12 @@ and switches off the display backlight after one minute of inactivity.
 ## Features
 
 - Shake-to-roll using a QMI8658 accelerometer
-- 38 phrases editable from Home Assistant or the device web page
-- Editable curved text around the display ring
+- 38 phrases editable from Home Assistant or the device web page. You could edit the code to add more, but this was the most Oracle centric dad jokes I could come up with, so I stopped at 38. 
+- quiz functions
+- ROI calculator functions (for Oracle AI Agents)
+- qr code display for your website or contact information
+- Company logo display
+- arcade shooting game
 - Battery voltage and estimated percentage sensors
 - Battery-level ring: green, yellow, or red
 - Automatic wake on motion and backlight sleep after inactivity
@@ -19,18 +23,15 @@ and switches off the display backlight after one minute of inactivity.
 
 | Qty. | Item | Notes and example source |
 | ---: | --- | --- |
-| 1 | Waveshare ESP32-S3-LCD-1.28 | Use the non-touch 1.28-inch round LCD version targeted by this configuration. [Waveshare product page](https://www.waveshare.com/esp32-s3-lcd-1.28.htm) · [Amazon search](https://www.amazon.com/s?k=Waveshare+ESP32-S3-LCD-1.28) |
+| 1 | Waveshare ESP32-S3-LCD-1.28 | Use the touch screen version! The non touch screen version is much less resistant to physical shock and will crack if hit right. The code as written requires long press on the screen to access menu, though the main shake to see phrase functions will work without this, I still recommend touch screen version for durability and max feature use!  [Waveshare product page](https://www.waveshare.com/esp32-s3-lcd-1.28.htm) · [Amazon search](https://www.amazon.com/s?k=Waveshare+ESP32-S3-LCD-1.28) |
 | 1 | 3.7 V LiPo battery, approximately 950 mAh | A protected 1-cell battery such as a 503450-size 950 mAh pack works if it fits the enclosure. The board uses an **MX1.25 2-pin connector**; verify connector type and polarity before connecting it. [Amazon search](https://www.amazon.com/s?k=3.7V+950mAh+LiPo+MX1.25+2-pin) |
-| 5 | M2 × 12 mm machine screws | Used to fasten the enclosure. Choose the head style that matches the printed recesses. [Amazon search](https://www.amazon.com/s?k=M2+x+12mm+machine+screws) |
-| 1 | Miniature SPDT slide switch | Use the switch style and dimensions required by your enclosure and wiring; wire it as the project's on/off switch. [Amazon search](Mini Micro Slide Switch - 1p2t 2... https://www.amazon.com/dp/B0DN69L9SG?ref=ppx_pop_mob_ap_share) |
-| 1 | USB-C data cable | Needed for the first flash and useful for charging and diagnostics. [Amazon search](https://www.amazon.com/s?k=USB-C+data+cable) |
+| 5 | M2 × 12 mm machine screws | Used to fasten the enclosure. You can go shorter on the battery hold down, even 8mm may work. For the main case, you may be able to make it work with 10mm, but cannot use longer than 12.  [Amazon search](https://www.amazon.com/s?k=M2+x+12mm+machine+screws) |
+| 1 | Miniature SPDT slide switch | This keeps the battery from draining while it's in your bag, but it does mean that it won't charge unless you have the switch left in on position. I recommend marking the on side with a paint dot. [Amazon search](Mini Micro Slide Switch - 1p2t 2... https://www.amazon.com/dp/B0DN69L9SG?ref=ppx_pop_mob_ap_share) |
 | As needed | Hookup wire, solder, and heat-shrink tubing | For the battery/switch connections. [Amazon search](https://www.amazon.com/s?k=electronic+hookup+wire+solder+heat+shrink+kit) |
-| 1 | 3D printer | A typical FDM printer with a 0.4 mm nozzle is suitable for the enclosure. |
+| 1 | 3D printer | A typical FDM printer with a 0.4 mm nozzle is suitable for the enclosure. I love my Bambu Lab P1S! |
 | About 60 g | PLA or PETG filament | I love PETG for heat resistance and durability, but the shiny nature feels weird to hold all day. PLA has been durable enough and feels better. 
 
-Shopping links are examples, not endorsements or affiliate links. Availability
-and listings change. Check dimensions, plug type, battery polarity, and voltage
-before ordering or connecting any part. Never force a battery connector, be careful tightening the hold down bar to avoid unnecessary pressure. 
+
 
 ## Hardware and pin map
 
